@@ -5,9 +5,33 @@ const moods = ref(['Happy', 'Sad', 'Angry']);
 const subject = ref('');
 const entry = ref('');
 const mood = ref('');
+const showStatus = ref(false);
+const status = ref('');
 
 // Add Code Here
+async function add() {
+    const url = 'http://localhost:8000/posts'
+    const data = {
+        subject: subject.value,
+        entry: entry.value,
+        mood: mood.value
+    }
+    try {
+        const response = await axios.post(url, data)
+        console.log(response.data)
+        showStatus.value = true
+        status.value = "Post added successfully!"
 
+        // clear form input when form is added successfully
+        subject.value = ''
+        entry.value = ''
+        mood.value = ''
+    } catch (error) {
+        console.error(error)
+        showStatus.value = true
+        status.value = 'There was an error: ' + error.message
+    }
+}
 
 </script>
 
@@ -24,10 +48,18 @@ const mood = ref('');
 
         Mood:
         <!-- TODO: Build a dropdown list here for selecting the mood -->
+        <select v-model="mood">
+            <option value="">Select mood</option>
+            <option v-for="m in moods" :key="m" :value="m">{{ m }}</option>
+        </select>
         <br>
 
         <br>
-        <button>Submit New Post</button>
+        <button @click="add">Submit New Post</button>
+
+        <div v-if="showStatus" style="margin-top: 15px; color: blue; font-weight: bold;">
+            {{ status }}
+        </div>
 
         <hr>
         <RouterLink to="/ViewPosts/">Click  here to return to Main Page</RouterLink>  
