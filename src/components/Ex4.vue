@@ -31,6 +31,6 @@ function addItem() {
      </ul>
      <br>
      <!-- keydown.enter is when user click enter key, it will be added -->
-     <input type="text" v-model="newItem" @keydown.enter="addItem">
+     <input type="text" v-model="newItem" @keyup.enter="addItem">
      <button @click="addItem">Add! </button>
 </template>
